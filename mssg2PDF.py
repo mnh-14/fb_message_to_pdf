@@ -1,3 +1,4 @@
+from ast import Tuple
 import fpdf
 import os, json, sys
 import contextlib, datetime
@@ -55,6 +56,8 @@ def pick_correct_file() -> dict:
                     
 
 def pick_user_file() -> dict:
+    source_dir = askdirectory(title="Pick the unzipped 'Your facebook activity' folder")
+    source_dir = source_dir.replace("your_facebook_activity", '')
     folder = askdirectory(title="Pick the message folder of your desired user")
     folder.replace('/', '\\')
     file_path = folder + "\\message_1.json"
@@ -63,6 +66,7 @@ def pick_user_file() -> dict:
         return pick_user_file()
     with open(file_path) as json_file:
         message_dict = json.load(json_file)
+        message_dict['source folder'] = source_dir
         return message_dict
 
 
@@ -143,7 +147,7 @@ def mainfunc():
         write_prev_timestamp(pdf, prev_message, message, own_name)
         write_nameplate(pdf, prev_message, message, own_name)
         write_messages(pdf, message, own_name)
-        print_pictures(pdf, message, own_name)
+        print_pictures(pdf, message, own_name, main_dict['source folder'])
 
         # update prev message and message number
         prev_message = message
@@ -202,6 +206,7 @@ def write_nameplate(pdf: fpdf.FPDF, prev_text:dict , cur_text:dict, own_name:str
             pdf.cell(pdf.w-15, 7, cur_text['nickname'], ln=True, align=alingment)
 
 
+
 def write_messages(pdf:fpdf.FPDF, cur_text:dict, own_name):
     """Skips photo collections\n
     Writes the messages after positioning them according to sender\n
@@ -222,6 +227,7 @@ def write_messages(pdf:fpdf.FPDF, cur_text:dict, own_name):
             pdf.multi_cell(cur_text['cell_length'], 13, main_text, border=True, align='L', fill=True, ln=True)
 
 
+
 def get_cell_length(pdf:fpdf.FPDF, text:str):
     """Finds the longest line, and returns cell length based on it\n
     If exceeds max cell length, returns max cell length"""
@@ -232,7 +238,8 @@ def get_cell_length(pdf:fpdf.FPDF, text:str):
     return cell_length if cell_length < CONSTANTS['max celllength'] else CONSTANTS['max celllength']
 
 
-def print_pictures(pdf:fpdf.FPDF, curr_text:dict, own_name:str):
+
+def print_pictures(pdf:fpdf.FPDF, curr_text:dict, own_name:str, source:str):
     """Works only if current text is a photo collection\n
     Iterates over the photo collection and prints them on sender align"""
     if (pictures:= curr_text.get('photos')) is None:
@@ -242,7 +249,7 @@ def print_pictures(pdf:fpdf.FPDF, curr_text:dict, own_name:str):
         back_cell_length = CONSTANTS['img margin gap'] if curr_text['sender_name'] != own_name else left_margin
         pdf.cell(back_cell_length, 5, '')
         for a_photo in pictures:
-            pdf.image(a_photo['uri'], None, None, CONSTANTS['img width'])
+            pdf.image(source+a_photo['uri'], None, None, CONSTANTS['img width'])
 
 
 
