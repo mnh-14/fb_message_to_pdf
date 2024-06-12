@@ -214,8 +214,13 @@ def write_messages(pdf:fpdf.FPDF, cur_text:dict, own_name):
 
     if 'photos' in cur_text:
         return None
-    removed_txt = "!!! Message Removed !!!"
-    main_text = cur_text.get('content', removed_txt)
+    alter_txt = "!!! Message Removed !!!"
+    if 'files' in cur_text:
+        alter_txt = 'some file'
+    elif 'videos' in cur_text:
+        alter_txt = 'some videos'
+
+    main_text = cur_text.get('content', alter_txt)
     cur_text['cell_length'] = get_cell_length(pdf, main_text)
     # align the cells and write those texts
     if cur_text['sender_name'] != own_name:

@@ -20,6 +20,6 @@ And it should be good to go.
 
 
 ## -------
-This script only keeps text messages, shared photos, and timestamps. No representations of videos, no reactions.
-Also, this script is meant to create pdfs readable with smartphones. So for computers, the font size may seem too much.
+This script only keeps text messages, shared photos, and timestamps. No representations of videos, reactions, files, links.
 May work on them in the future.
+Also, this script is meant to create pdfs readable with smartphones. So for computers, the font size may seem too much.
