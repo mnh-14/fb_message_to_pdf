@@ -12,7 +12,7 @@ Make sure at the final step you select "JSON" format. It will take some time bef
 
 2. After downloading facebook info, before running the script make sure the module "fpdf2" is installed. It can simply be installed with the command `pip install fpdf2`
 
-3. Finally run the script. From the user folder picker, go to your facebook activity inbox -> messages -> the user folder.
+3. Finally run the script. From the folder picker,first select "your_facebook_activity", then go to your "your_facebook_activity" -> messages -> the user folder.
 4. Choose your name, must !!
 5. Give nicknames if needed.
 
